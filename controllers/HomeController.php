@@ -31,9 +31,9 @@ class HomeController extends \vendor\classes\Controller
     }
 
 
-    public function actionIndex($clientId, $clientSecret, $redirectUri){
+    public function actionIndex(){
 //$clientId, $clientSecret, $redirectUri
-        $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
+//        $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
 
         echo $this->render('index', ['abc' => 1234, 'id' => $id], true);
 //         render('index', ['abc' => 1234]);

@@ -79,7 +79,10 @@ class Controller
 
         if (is_file($file)) {
 
-            $controllerPath = '\controllers\\' . $controller .'Controller';
+            $controllerFolder = $this->_config['controller']['controllerPath'];
+            $controllerFolder = empty($controllerFolder) ? 'controllers' : $controllerFolder;
+
+            $controllerPath = DIRECTORY_SEPARATOR .$controllerFolder. DIRECTORY_SEPARATOR . $controller .'Controller';
             $ObjectController = new $controllerPath($this->_request, $this->_config);
 
             $action = empty($this->_request->getAction()) ? ucwords(strtolower($ObjectController->defaultAction)) :  $this->_request->getAction();
@@ -131,8 +134,15 @@ class Controller
             }
         }
 
-        //Установка экшена по умолчанию
+        //Установка экшена по умолчанию из объекта $ObjectController, если он задан в нем
         $this->defaultAction = $ObjectController->defaultAction;
+        /*
+        нужно сделать авторизацию, вытаскивая параметры из $ObjectController
+
+        */
+        echo '<pre>';
+        var_dump($ObjectController);
+        echo '</pre>';
         call_user_func_array([$ObjectController, $MethodAction], $methodParams);
     }
 
