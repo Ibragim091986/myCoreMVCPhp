@@ -10,6 +10,11 @@ $config =[
         'defaultController' => 'home',
         'defaultAction' => 'index',
     ],
+    'user' => [
+        'identityClass' => 'models\User',
+        'enableAutoLogin' => true,
+        'loginUrl' => ['/home/login'],
+    ],
     /*'controllerPath' => 'controllers',*/
     'db' => [
         'host' => 'localhost',

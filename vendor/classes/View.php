@@ -71,13 +71,23 @@ class View
 
     public function render($view, $params = [])
     {
+
         $viewFile = $this->findViewFile($view);
         return $this->renderFile($viewFile, $params);
     }
 
     private function findViewFile($view)
     {
-        $file = $this->getPath($this->_viewPath . strtolower($this->_request->getController()), $view);
+        $controller = $this->_request->getController();
+        $action = $this->_request->getAction();
+
+
+        if(empty($action) && !empty($controller)){
+            $action = $controller;
+            $controller = $this->_config['controller']['defaultController'];
+        }
+
+        $file = $this->getPath($this->_viewPath . strtolower($controller), $view);
         /*$file = $this->_viewPath . strtolower($this->_request->getController()) . DIRECTORY_SEPARATOR . $view . '.php' ;
         if(!is_file($file)){
             throw new \Exception ('Не могу найти файл: `' . $file . '`');

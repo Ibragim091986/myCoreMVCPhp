@@ -31,7 +31,8 @@ class HomeController extends \vendor\classes\Controller
     }
 
 
-    public function actionIndex(){
+    public function actionIndex()
+    {
 //$clientId, $clientSecret, $redirectUri
 //        $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
 
@@ -39,12 +40,18 @@ class HomeController extends \vendor\classes\Controller
 //         render('index', ['abc' => 1234]);
     }
 
-    public function actionArticle(){
+    public function actionArticle()
+    {
 
 //        echo '<br>actionIndex $id = <br>';
 //        var_dump($id);
 
         echo $this->render('article', ['abc' => 1234]);
 //         render('index', ['abc' => 1234]);
+    }
+
+    public function actionLogin()
+    {
+        echo $this->render('index', ['abc' => 1234]);
     }
 }

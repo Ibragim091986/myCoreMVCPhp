@@ -44,7 +44,7 @@
     </style>
 </head>
 <body>
-<div id="header"><h1>Байки из склепа</h1></div>
+<div id="header"><h1>Байки из склепа Статья АРТИКЛЕ</h1></div>
 <div id="sidebar">
     <p><a href="b_all.html">Все байки</a></p>
     <p><a href="b_author.html">Байки по автору</a></p>

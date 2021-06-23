@@ -72,6 +72,7 @@ class Controller
     {
 
         $controller = $this->_request->getController();
+
 //        $action = empty($this->_request->getAction()) ? ucwords(strtolower($this->defaultAction)) :  $this->_request->getAction();
         $fullpath = $this->_path . $controller;
         $file = $fullpath . 'Controller.php';
@@ -140,9 +141,9 @@ class Controller
         нужно сделать авторизацию, вытаскивая параметры из $ObjectController
 
         */
-        echo '<pre>';
-        var_dump($ObjectController);
-        echo '</pre>';
+//        echo '<pre>';
+//        var_dump($ObjectController);
+//        echo '</pre>';
         call_user_func_array([$ObjectController, $MethodAction], $methodParams);
     }
 

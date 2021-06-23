@@ -25,6 +25,10 @@ class Request
         $arraUri = explode('/', $clearGetFromUri);
         $this->_controller = ucwords(strtolower($arraUri[1]));
         $this->_action =ucwords(strtolower($arraUri[2]));
+        if(empty($this->_action)){
+            $this->_action = $this->_controller;
+            $this->_controller = $this->_config['controller']['defaultController'];
+        }
 
     }
 
@@ -60,6 +64,7 @@ class Request
 
     public function getController()
     {
+
         return empty($this->_controller) ? $this->_config['controller']['defaultController'] : $this->_controller;
     }
 
