@@ -10,6 +10,7 @@ class User
     public $identityClass;
 
     private $_config;
+    private $_user;
 
     public function __construct()
     {
@@ -29,7 +30,7 @@ class User
         setcookie("hash", $authKey, time()+60*60*24*30, "/");
     }
 
-    function generateCode($length=6) {
+    private function generateCode($length=6) {
 
         $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPRQSTUVWXYZ0123456789";
 
@@ -43,6 +44,12 @@ class User
 
         return $code;
 
+    }
+
+    public function getUserObject()
+    {
+
+        return empty($this->_user) ? $this->_user = new $this->_config['user']['identityClass'] : $this->_user;
     }
 
 }

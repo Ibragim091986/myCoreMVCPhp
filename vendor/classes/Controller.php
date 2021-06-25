@@ -13,14 +13,16 @@ class Controller
     private $_request;
     private $_path;
     private $_view;
+    private $_user;
 
     public function __construct()
     {
 
         $this->_config = Core::$config;
         $this->_request = Core::$request;
+        $this->_user = Core::$user;
         $this->setPath($this->_config['controller']['controllerPath']);
-        $this->defaultAction = empty($this->defaultAction) ? $this->_config['controller']['defaultAction'] : $this->defaultAction;
+        $this->defaultAction = empty($this->defaultAction) ? ucwords(strtolower($this->_config['controller']['defaultAction'])) : $this->defaultAction;
 
     }
 
@@ -56,7 +58,7 @@ class Controller
     {
 
         $path = trim($path, '/\\');
-        $path = '..' . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR;
+        $path = Core::$homeDir . $path . DIRECTORY_SEPARATOR;
 
         if (is_dir($path) == false) {
 
@@ -83,8 +85,8 @@ class Controller
             $controllerFolder = $this->_config['controller']['controllerPath'];
             $controllerFolder = empty($controllerFolder) ? 'controllers' : $controllerFolder;
 
-            $controllerPath = DIRECTORY_SEPARATOR .$controllerFolder. DIRECTORY_SEPARATOR . $controller .'Controller';
-            $ObjectController = new $controllerPath($this->_request, $this->_config);
+            $controllerPath = '\\' .$controllerFolder. '\\' . $controller .'Controller';
+            $ObjectController = new $controllerPath();
 
             $action = empty($this->_request->getAction()) ? ucwords(strtolower($ObjectController->defaultAction)) :  $this->_request->getAction();
             $MethodAction = 'action' . $action;
@@ -141,9 +143,8 @@ class Controller
         нужно сделать авторизацию, вытаскивая параметры из $ObjectController
 
         */
-//        echo '<pre>';
-//        var_dump($ObjectController);
-//        echo '</pre>';
+
+
         call_user_func_array([$ObjectController, $MethodAction], $methodParams);
     }
 

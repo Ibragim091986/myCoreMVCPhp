@@ -72,6 +72,7 @@ class Model
             $this->_db = new PDO($DSN, $this->_username, $this->_passwd, $opt);
         }
 
+
         return $this->_db;
 
     }
@@ -141,6 +142,7 @@ class Model
     */
     public function one()
     {
+
 //        $this->setIsNewRecord(true);
 
         $result = $this->querySelect(true);
@@ -179,6 +181,7 @@ class Model
 
     private function querySelect($one = false)
     {
+
         $query = '';
 
         if($one){
@@ -193,6 +196,7 @@ class Model
 
         $query .= $this->_select . $this->_from . $this->_join . $this->_where . $this->_orderBy . $limit;
         $result = $this->getDb()->prepare($query);
+
         $result->execute($this->_whereArray);
         return $result;
 
@@ -226,6 +230,7 @@ class Model
     {
         return $this->select()->where([$this->tableName() => ['id'=> $id]])
         ->one();
+
 
 //        $db = $this->getDb()->query('SELECT * FROM users');
 

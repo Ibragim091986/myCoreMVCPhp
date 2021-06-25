@@ -8,14 +8,29 @@ class Core
     private $_request;
     private $_user;
 
+
     public static $config;
     public static $request;
+    public static $user;
+    public static $homeDir;
+
+    /**
+     * @var Session
+     */
+    public static $session;
+
+    public static $microTimeStart;
+
 
     public function __construct($config)
     {
         $this->_config = static::$config = $config;
         $this->_request = static::$request = new Request();
-        $this->_user = new User();
+        $this->_user = static::$user = new User();
+        static::$homeDir = __DIR__ . DIRECTORY_SEPARATOR .'..'. DIRECTORY_SEPARATOR . '..'. DIRECTORY_SEPARATOR;
+        static::$session = new Session();
+        static::$microTimeStart = microtime(true);
+
 
     }
 
@@ -33,12 +48,9 @@ class Core
 //        $control = new Controller($this->_request, $this->_config);
 
 //        $Model = new Model();
-        $start = microtime(true);
+//        $start = microtime(true);
         Controller::run();
 
-        echo "<pre>";
-        var_dump(microtime(true) - $start);
-        echo "</pre>";
 
 //        var_dump($control);
 //        echo '<br>RUN CORE 2 ';
