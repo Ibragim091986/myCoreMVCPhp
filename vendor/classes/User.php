@@ -46,6 +46,11 @@ class User
 
     }
 
+    public function getIsGuest()
+    {
+        return true;
+    }
+
     public function getUserObject()
     {
 

@@ -13,19 +13,21 @@ class HomeController extends \vendor\classes\Controller
     {
         return [
             'only' => ['index', 'article'],
-            [
+            'rules' => [
+                [
                 'allow' => true,
-                'actions' => ['login'],
+                'actions' => ['login', 'article'],
                 //guest, authenticated
                 'roles' => ['guest'],
 
-            ],
-            [
+                ],
+                [
                 'allow' => true,
-                'actions' => ['article'],
+                'actions' => ['article1'],
                 //guest, authenticated
                 'roles' => ['authenticated'],
-            ]
+                ]
+            ],
 
         ];
     }

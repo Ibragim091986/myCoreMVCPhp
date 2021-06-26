@@ -37,7 +37,7 @@ class Controller
 
 //        var_dump($ObjectController);
 
-        $controllerBase->runAction($ObjectController, $MethodAction);
+        $controllerBase->runAction($ObjectController, $MethodAction, $controller, $action);
 //        $ObjectController->$MethodAction();
 
 //        var_dump($file);
@@ -107,7 +107,7 @@ class Controller
     }
 
 
-    public function runAction($ObjectController, $MethodAction)
+    private function runAction($ObjectController, $MethodAction, $controller, $action)
     {
 
         $method = new \ReflectionMethod($ObjectController, $MethodAction);
@@ -143,6 +143,14 @@ class Controller
         нужно сделать авторизацию, вытаскивая параметры из $ObjectController
 
         */
+
+        /*echo '<pre>';
+        var_dump($action);
+        var_dump($controller);
+        var_dump($ObjectController->access());
+
+        var_dump(AccessControl::access($ObjectController, $controller, $action));
+        echo '</pre>';*/
 
 
         call_user_func_array([$ObjectController, $MethodAction], $methodParams);
