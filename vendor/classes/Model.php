@@ -228,6 +228,10 @@ class Model
 
     public function findOne($id)
     {
+        if(is_array($id)) {
+            return $this->select()->where([$this->tableName() => $id])
+                ->one();
+        }
         return $this->select()->where([$this->tableName() => ['id'=> $id]])
         ->one();
 

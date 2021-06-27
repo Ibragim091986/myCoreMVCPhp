@@ -4,6 +4,9 @@
 namespace vendor\classes;
 
 
+use http\Env\Response;
+use Ramsey\Uuid\Type\Hexadecimal;
+
 class Controller
 {
 
@@ -139,38 +142,77 @@ class Controller
 
         //Установка экшена по умолчанию из объекта $ObjectController, если он задан в нем
         $this->defaultAction = $ObjectController->defaultAction;
+
         /*
-        нужно сделать авторизацию, вытаскивая параметры из $ObjectController
+        проверка правил (rule), вытаскивая параметры из $ObjectController
 
         */
 
-        /*echo '<pre>';
-        var_dump($action);
-        var_dump($controller);
-        var_dump($ObjectController->access());
-
-        var_dump(AccessControl::access($ObjectController, $controller, $action));
-        echo '</pre>';*/
+        if(AccessControl::access($ObjectController, $controller, $action)){
+            call_user_func_array([$ObjectController, $MethodAction], $methodParams);
+        }elseif(!$this->redirectOnError($ObjectController, $controller, $this->_config['user']['loginUrl'], '0')){
+            $this->redirectOnError($ObjectController, $controller, $this->_config['user']['errorAction'], '0');
+        }
 
 
-        call_user_func_array([$ObjectController, $MethodAction], $methodParams);
+
     }
 
-    public function render($view = 'index', $arraValue = [], $renderMain = true)
+    private function redirectOnError($ObjectController, $controller, $redirectURI, $response_code = 0)
+    {
+
+        $this->_request->setRequestUri($redirectURI)->explodeURI();
+        $action = $this->_request->getAction();
+        if(AccessControl::access($ObjectController, $controller, $action)){
+
+            $protocol = $this->_request->getProtocol();
+            $host = $this->_request->getHost();
+            $controller = strtolower($this->_request->getController());
+            $action = strtolower($this->_request->getAction());
+            $url = $protocol . '://' . $host . '/' . $controller . '/' . $action;
+            $this->_request->redirect($url, $response_code);
+            //header("Location: " . $url, true, $response_code);
+            //exit();
+            //self::run();
+            //return true;
+
+        }else{
+            return false;
+        }
+
+    }
+
+    // $mainLayout = 'views/layouts/liginmain'
+    public function render($view = 'index', $arraValue = [], $layoutPath = null, $mainFile = null, $renderMain = true)
     {
         $content = $this->getView()->render($view,  $arraValue);
-        return $renderMain ? $this->renderContent($content): $content;
+
+        return $renderMain ? $this->renderContent($content, $arraValue, $layoutPath, $mainFile): $content;
 
     }
 
-    public function renderContent($content)
+    public function renderContent($content,$arraValue = [], $layoutPath = null, $mainFile = null)
     {
+        $matchPath = false;
+        if(($layoutPath !== null) || ($mainFile !== null) ) $matchPath = true;
 
+        if($matchPath && ($layoutPath === null)){
+            $layoutPath = $this->_config['view']['layoutPath'];
+        }
+        if($matchPath && ($mainFile === null)){
+            $mainFile = $this->_config['view']['mainFile'];
+        }
+
+        if($matchPath){
+            $path =  $this->getView()->getPath($layoutPath, $mainFile);
+            $this->getView()->setMainFile($path);
+        }
 
         $layoutFile = $this->getView()->getMainFile();
 
         if ($layoutFile !== false) {
-            return $this->getView()->renderFile($layoutFile, ['content' => $content]);
+            $arraValue = ['content' => $content] + $arraValue;
+            return $this->getView()->renderFile($layoutFile, $arraValue);
         }
 
         return $content;

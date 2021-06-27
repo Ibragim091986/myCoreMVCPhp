@@ -21,7 +21,7 @@ class Cookie
 
     /**
      * Cookie life time
-     * @var DateTime
+     * @var int
      */
     private $time;
 
@@ -88,10 +88,10 @@ class Cookie
     }
 
     /**
-     * @param $id
+     * @param $name
      */
-    public function setName($id) {
-        $this->name = $id;
+    public function setName($name) {
+        $this->name = $name;
         return $this;
     }
 
@@ -137,11 +137,12 @@ class Cookie
      */
     public function setTime($time) {
         // Create a date
-        $date = new \DateTime();
+        //$date = new \DateTime();
         // Modify it (+1hours; +1days; +20years; -2days etc)
-        $date->modify($time);
+        //$date->modify($time);
         // Store the date in UNIX timestamp.
-        $this->time = $date->getTimestamp();
+        //$this->time = $date->getTimestamp();
+        $this->time = $time;
         return $this;
     }
 
@@ -165,6 +166,10 @@ class Cookie
      */
     public function getValue() {
         return $this->value;
+    }
+
+    public static function find(){
+        return new static();
     }
 }
 

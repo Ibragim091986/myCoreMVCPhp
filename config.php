@@ -13,7 +13,8 @@ $config =[
     'user' => [
         'identityClass' => 'models\User',
         'enableAutoLogin' => true,
-        'loginUrl' => ['/home/login'],
+        'loginUrl' => '/home/login',
+        'errorAction' => '/home/error',
     ],
     /*'controllerPath' => 'controllers',*/
     'db' => [

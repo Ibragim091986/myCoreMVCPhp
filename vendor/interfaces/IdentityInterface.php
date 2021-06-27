@@ -8,6 +8,9 @@ interface IdentityInterface
     // Получить экземпляр пользователя по его идентификатору
     public static function findIdentity($id);
 
+    //Проверка пароля
+    public function validatePassword($password);
+
     // Получить идентификатор пользователя
     public function getId();
 

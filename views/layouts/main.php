@@ -41,9 +41,20 @@
     </style>
 </head>
 <body>
-<h1> HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH</h1>
+<div id="header"><h1>Тестовая работа AMOCRM</h1></div>
+<div id="sidebar">
+    <p><a href="/index">Главная</a></p>
+    <p><a href="/article">Статья</a></p>
+    <p><a href="/error">Страница ошибки</a></p>
+    <?php
+     if(!\vendor\classes\Core::$user->getIsGuest()) echo '<p><a href="/logout">Выйти</a></p>';
+     else  echo '<p><a href="/login">Войти</a></p>';
+    ?>
+
+</div>
 
 <?= $content  ?>
+
 </body>
 </html>
 

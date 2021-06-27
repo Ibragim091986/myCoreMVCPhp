@@ -33,7 +33,7 @@ class View
     }
 
 
-    function getPath($path, $file = false)
+    public function getPath($path, $file = false)
     {
 
         $path = trim($path, './\\');
@@ -133,6 +133,11 @@ class View
     public function getMainFile()
     {
         return $this->_mainFile;
+    }
+
+    public function setMainFile($mainFile)
+    {
+        $this->_mainFile = $mainFile;
     }
 //
 //    protected function findViewFile($view, $context = null)

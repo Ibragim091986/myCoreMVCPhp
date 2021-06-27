@@ -10,7 +10,15 @@ class Core
 
 
     public static $config;
+
+    /**
+     * @var Request
+     */
     public static $request;
+
+    /**
+     * @var User
+     */
     public static $user;
     public static $homeDir;
 

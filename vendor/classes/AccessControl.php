@@ -61,9 +61,7 @@ class AccessControl
     {
         $access = $this->_ObjectController->access();
         if(isset($access['only'])) $this->only = $access['only'];
-        var_dump($this->only);
         if(isset($access['rules'])) $this->rules = $access['rules'];
-        var_dump($this->rules);
         return $this;
 //        echo '<br><br>';
 //        var_dump($access);
@@ -75,13 +73,12 @@ class AccessControl
         return new static($ObjectController, $controller, $action);
     }
 
+
     public static function access(Controller $ObjectController, $controller, $action)
     {
-
         return self::find($ObjectController, $controller, $action)
             ->setParameters()
             ->matchRules();
-
     }
 
 
