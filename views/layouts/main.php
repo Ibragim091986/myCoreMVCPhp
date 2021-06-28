@@ -39,6 +39,20 @@
             clear: left; /* Отменяем действие float */
         }
     </style>
+    <style>
+        .api table {
+            border: 1px solid grey;
+        }
+
+        .api th {
+            border: 1px solid grey;
+        }
+
+        .api td {
+            border: 1px solid grey;
+        }
+
+    </style>
 </head>
 <body>
 <div id="header"><h1>Тестовая работа AMOCRM</h1></div>
@@ -46,6 +60,7 @@
     <p><a href="/index">Главная</a></p>
     <p><a href="/article">Статья</a></p>
     <p><a href="/error">Страница ошибки</a></p>
+    <p><a href="/amocrm">AmoCrm</a></p>
     <?php
      if(!\vendor\classes\Core::$user->getIsGuest()) echo '<p><a href="/logout">Выйти</a></p>';
      else  echo '<p><a href="/login">Войти</a></p>';

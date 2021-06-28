@@ -1,2 +1,4 @@
 /vendor/lib/vendor/*
 /.idea/*
+/web/TOKEN_FILE
+/tmp/*
