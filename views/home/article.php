@@ -13,42 +13,40 @@
 
         try {
 
-            //var_dump($apiClient->leads()->get()->toArray());
-            //var_dump($apiClient->leads()->getOne(1856983));
-            //var_dump($apiClient->companies()->getOne(3493643)->toArray());
-            //var_dump($apiClient->contacts()->getOne(3493625)->toArray());
-            //var_dump($apiClient->contacts()->getLinks( (new \AmoCRM\Models\ContactModel())->setId(3493625) ));
-            //var_dump($apiClient->leads()->getLinks( (new \AmoCRM\Models\LeadModel())->setId(1856983)));
-            $leads = $apiClient->leads()->get()->all();
+            $leads = $apiClient->leads()->get(null, [\AmoCRM\Models\LeadModel::CONTACTS])->all();
             $tr = '';
             foreach ($leads as $item){
+                //var_dump($item);
                 $name =  $item->name;
                 $manadger = $apiClient->users()->getOne($item->responsible_user_id)->getName();
                 $links = $apiClient->leads()->getLinks( (new \AmoCRM\Models\LeadModel())->setId($item->id));
-
+                //var_dump($links);
                 $contact = '';
                 $compani = '';
 
                 foreach ($links as $linkModel){
-                    if($linkModel->toEntityType == 'contacts'){
-                        $contactModel = $apiClient->contacts()->getOne($linkModel->toEntityId)->toArray();
-                        $contact .= $contactModel['name'] . ' (';
-                        foreach ($contactModel['custom_fields_values'] as $custom_fields_values){
+                    /**
+                     * @var \AmoCRM\Models\LinkModel $linkModel
+                     */
+                    if($linkModel->getToEntityType() == 'contacts'){
+                        //$contactModel = $apiClient->contacts()->getOne($linkModel->toEntityId)->toArray();
+                        $contactModel = $apiClient->contacts()->getOne($linkModel->getToEntityId());
 
-                            if($custom_fields_values['field_code'] == 'PHONE')$contact .=  ' т. ' . $custom_fields_values['values'][0]['value'];
-                            elseif ($custom_fields_values['field_code'] == 'EMAIL') $contact .=  ' email. ' . $custom_fields_values['values'][0]['value'];
-                        }
-                        $contact .= ' ) <br>';
+                        $name = $contactModel->getName();
+                        $phone = $contactModel->getCustomFieldsValues()->getBy('fieldCode', 'PHONE')->getValues()->first()->value;
+                        $email = $contactModel->getCustomFieldsValues()->getBy('fieldCode', 'EMAIL')->getValues()->first()->value;
+
+                        $contact .= $name . ' (т. ' . $phone . ' email. ' . $email . ') <br>';
+
                     }
-                    elseif($linkModel->toEntityType == 'companies'){
-                        $companiMode = $apiClient->companies()->getOne($linkModel->toEntityId)->toArray();
-                        $compani .= $companiMode['name'] . ' ';
-                        foreach ($companiMode['custom_fields_values'] as $custom_fields_values){
-                            if($custom_fields_values['field_code'] == NULL){
-                                $compani .='(' . $custom_fields_values['field_name'] . ' - ' .  $custom_fields_values['values'][0]['value'];
-                            }
+                    elseif($linkModel->getToEntityType() == 'companies'){
 
-                        }
+                        $companiMode = $apiClient->companies()->getOne($linkModel->getToEntityId());
+                        $name = $companiMode->getName();
+                        $customField = $companiMode->getCustomFieldsValues()->getBy('fieldName', 'Пользовательское 2')->getValues()->first()->value;
+
+                        $compani .= $name . ' (' . $customField . ')';
+
                     }
                 }
 

@@ -49,9 +49,9 @@ class HomeController extends \vendor\classes\Controller
 
     public function actionArticle()
     {
-        $clientId = '237f9f6e-8cbd-4094-a8b5-0c797e1362b9';
-        $clientSecret = 'hne1VrSBEW813h14bkcnKuPDFQG50hge2ICsNFU9oeZ59I8iFLCEXXIIAMrH9Niu';
-        $redirectUri = 'http://767f4f4f0110.ngrok.io/amocrm';
+        $clientId = '37921d55-3e69-4cfe-b395-010dd787ca1e';
+        $clientSecret = 'hU7OaFvZzEdXNzZfGFgQ1vKRnrjvsTK4fTco7vlHXKacUC7E8tENgscDsyk65qxR';
+        $redirectUri = ' http://b6077782822a.ngrok.io/amocrm';
 
         $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
 
