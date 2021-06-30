@@ -29,7 +29,7 @@
                      * @var \AmoCRM\Models\LinkModel $linkModel
                      */
                     if($linkModel->getToEntityType() == 'contacts'){
-                        //$contactModel = $apiClient->contacts()->getOne($linkModel->toEntityId)->toArray();
+
                         $contactModel = $apiClient->contacts()->getOne($linkModel->getToEntityId());
 
                         $name = $contactModel->getName();
