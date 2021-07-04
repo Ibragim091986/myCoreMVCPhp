@@ -4,6 +4,10 @@
  * @var \AmoCRM\Client\AmoCRMApiClient $apiClient
  */
 
+use AmoCRM\EntitiesServices\Interfaces\HasParentEntity;
+use AmoCRM\Exceptions\AmoCRMApiException;
+use AmoCRM\Helpers\EntityTypesInterface;
+
 ?>
 
 <div id="content">
@@ -11,7 +15,12 @@
 
     <pre><?php
 
-        try {
+            //$tasksCollection  = $apiClient->tasks();
+            //$tasksCollection = $tasksCollection->get();
+
+            //var_dump($apiClient->leads()->getOne(3029111));
+            //var_dump($tasksCollection);
+
 
             $leads = $apiClient->leads()->get(null, [\AmoCRM\Models\LeadModel::CONTACTS])->all();
             $tr = '';
@@ -33,19 +42,44 @@
                         $contactModel = $apiClient->contacts()->getOne($linkModel->getToEntityId());
 
                         $name = $contactModel->getName();
-                        $phone = $contactModel->getCustomFieldsValues()->getBy('fieldCode', 'PHONE')->getValues()->first()->value;
-                        $email = $contactModel->getCustomFieldsValues()->getBy('fieldCode', 'EMAIL')->getValues()->first()->value;
 
-                        $contact .= $name . ' (т. ' . $phone . ' email. ' . $email . ') <br>';
+                        $phone = $contactModel->getCustomFieldsValues();
+                        if($phone !== null) $phone = $phone->getBy('fieldCode', 'PHONE');
+                        $email = $contactModel->getCustomFieldsValues();
+                        if($email !== null) $email = $email->getBy('fieldCode', 'EMAIL');
+
+                        if($phone !== null) {
+                            $phone = $phone->getValues()->first()->value;
+                            $phone = 'т. ' . $phone;
+                        }else $phone = '';
+
+                        if($email !== null){
+                            $email = $email->getValues()->first()->value;
+                            $email = ' email: ' . $email;
+                        } else $email = '';
+
+                        $contact .= $name . ' (' . $phone . $email . ') <br>';
 
                     }
                     elseif($linkModel->getToEntityType() == 'companies'){
 
                         $companiMode = $apiClient->companies()->getOne($linkModel->getToEntityId());
                         $name = $companiMode->getName();
-                        $customField = $companiMode->getCustomFieldsValues()->getBy('fieldName', 'Пользовательское 2')->getValues()->first()->value;
 
-                        $compani .= $name . ' (' . $customField . ')';
+                        $customField = $companiMode->getCustomFieldsValues();
+                        if($customField !== null)$customField = $customField->getBy('fieldName', 'Пользовательское 2');
+
+                        //$customField = $companiMode->getCustomFieldsValues()->getBy('fieldName', 'Пользовательское 2');
+                        //$customField = null;
+
+                        if($customField !== null){
+                            $customField = $customField->getValues()->first()->value;
+                            $customField = ' (' . $customField . ')';
+                        }else{
+                            $customField = '';
+                        }
+
+                        $compani .= $name  . $customField;
 
                     }
                 }
@@ -54,11 +88,6 @@
                 //var_dump($links);
                 $tr .= "<tr><td>$name</td><td>$manadger</td><td>$contact</td><td>$compani</td></tr>";
             }
-
-        } catch (AmoCRMApiException $e) {
-            printError($e);
-            die;
-        }
 
 
         ?></pre>

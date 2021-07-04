@@ -59,6 +59,7 @@
 <div id="sidebar">
     <p><a href="/index">Главная</a></p>
     <p><a href="/article">Задание 3.1</a></p>
+    <p><a href="/createleads">Задание 3.2</a></p>
     <p><a href="/error">Страница ошибки</a></p>
     <p><a href="/amocrm">AmoCrm</a></p>
     <?php

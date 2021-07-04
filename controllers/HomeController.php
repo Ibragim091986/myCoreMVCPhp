@@ -14,18 +14,18 @@ class HomeController extends \vendor\classes\Controller
     public function access()
     {
         return [
-            'only' => ['index1', 'article', 'login'],
+            'only' => ['article', 'login', 'createleads', 'amocrm'],
             'rules' => [
                 [
                 'allow' => true,
-                'actions' => ['login', 'article1'],
+                'actions' => ['login'],
                 //guest, authenticated
                 'roles' => ['guest'],
 
                 ],
                 [
                 'allow' => true,
-                'actions' => ['login1','article'],
+                'actions' => ['article', 'createleads', 'amocrm'],
                 //guest, authenticated
                 'roles' => ['authenticated'],
                 ]
@@ -49,39 +49,17 @@ class HomeController extends \vendor\classes\Controller
 
     public function actionArticle()
     {
-        $clientId = '37921d55-3e69-4cfe-b395-010dd787ca1e';
-        $clientSecret = 'hU7OaFvZzEdXNzZfGFgQ1vKRnrjvsTK4fTco7vlHXKacUC7E8tENgscDsyk65qxR';
-        $redirectUri = ' http://b6077782822a.ngrok.io/amocrm';
-
-        $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
-
-        $accessToken = $this->getToken();
-        $apiClient->setAccessToken($accessToken)
-            ->setAccountBaseDomain($accessToken->getValues()['baseDomain'])
-            ->onAccessTokenRefresh(
-                function (AccessTokenInterface $accessToken, string $baseDomain) {
-                    $this->saveToken(
-                        [
-                            'accessToken' => $accessToken->getToken(),
-                            'refreshToken' => $accessToken->getRefreshToken(),
-                            'expires' => $accessToken->getExpires(),
-                            'baseDomain' => $baseDomain,
-                        ]
-                    );
-                }
-            );
-
-        //$apiClient->setAccessToken($this->getToken());
-        //$ownerDetails = $apiClient->getOAuthClient()->getResourceOwner($this->getToken());
-
-        //printf('Hello, %s!', $ownerDetails->getName());
-
-        /*echo '<pre>';
-        var_dump($apiClient->getOAuthClient());
-        echo '</pre>';*/
+        $apiClient = $this->connectAmocrm();
 
         echo $this->render('article', ['apiClient' => $apiClient]);
 //         render('index', ['abc' => 1234]);
+    }
+
+    public function actionCreateLeads()
+    {
+        $apiClient = $this->connectAmocrm();
+
+        echo $this->render('createleads', ['apiClient' => $apiClient], null , 'botstrmain');
     }
 
     public function actionLogin()
@@ -112,6 +90,36 @@ class HomeController extends \vendor\classes\Controller
         Core::$user->logout();
         Core::$request->goHome();
         echo $this->render('login', ['abc' => 1234]);
+    }
+
+
+
+    public function connectAmocrm()
+    {
+        $clientId = Core::$config['amocrm']['clientId'];
+        $clientSecret = Core::$config['amocrm']['clientSecret'];
+        $redirectUri = Core::$config['amocrm']['redirectUri'];
+
+        $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
+
+        $accessToken = $this->getToken();
+        $apiClient->setAccessToken($accessToken)
+            ->setAccountBaseDomain($accessToken->getValues()['baseDomain'])
+            ->onAccessTokenRefresh(
+                function (AccessTokenInterface $accessToken, string $baseDomain) {
+                    $this->saveToken(
+                        [
+                            'accessToken' => $accessToken->getToken(),
+                            'refreshToken' => $accessToken->getRefreshToken(),
+                            'expires' => $accessToken->getExpires(),
+                            'baseDomain' => $baseDomain,
+                        ]
+                    );
+                }
+            );
+
+        return $apiClient;
+
     }
 
 

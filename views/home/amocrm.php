@@ -1,6 +1,7 @@
 <?php
 
 use AmoCRM\Client\AmoCRMApiClient;
+use vendor\classes\Core;
 
 session_start();
 
@@ -9,9 +10,9 @@ define('TOKEN_FILE', \vendor\classes\Core::$homeDir . DIRECTORY_SEPARATOR . 'tmp
 //https://edilapti.amocrm.ru/oauth2/auth_code?response_type=code&mode=post_message&client_id=237f9f6e-8cbd-4094-a8b5-0c797e1362b9&approved_code=def50200382dc2931a706bb4b9b99227cfe608384f7cb6acebeb72fcbf23299d8ebe8c5f5e1dfa6b5362083eaa92e48a94fa9e2cfb4243e7a9a91b0c223740177b63ffda346f64de90c7621d7f296b9b628d3c70a46c57c26575c9d10d61dd478ce58867ada7d465bc62eceb06e1ad48513dc1b8e3e407eaac89fe16&scope%5B%5D=push_notifications&scope%5B%5D=crm&scope%5B%5D=notifications&redirect_uri=http%3A%2F%2F767f4f4f0110.ngrok.io%2Famocrm&state=507d785fe346c82c0c0b45a4ea2cab07
 
 
-$clientId = '37921d55-3e69-4cfe-b395-010dd787ca1e';
-$clientSecret = 'hU7OaFvZzEdXNzZfGFgQ1vKRnrjvsTK4fTco7vlHXKacUC7E8tENgscDsyk65qxR';
-$redirectUri = 'http://b6077782822a.ngrok.io/amocrm';
+$clientId = Core::$config['amocrm']['clientId'];
+$clientSecret = Core::$config['amocrm']['clientSecret'];
+$redirectUri = Core::$config['amocrm']['redirectUri'];
 
 $apiClient = new AmoCRMApiClient($clientId, $clientSecret, $redirectUri);
 
