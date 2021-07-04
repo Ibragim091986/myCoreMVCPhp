@@ -41,7 +41,7 @@ use AmoCRM\Helpers\EntityTypesInterface;
 
                         $contactModel = $apiClient->contacts()->getOne($linkModel->getToEntityId());
 
-                        $name = $contactModel->getName();
+                        $contactName = $contactModel->getName();
 
                         $phone = $contactModel->getCustomFieldsValues();
                         if($phone !== null) $phone = $phone->getBy('fieldCode', 'PHONE');
@@ -58,13 +58,13 @@ use AmoCRM\Helpers\EntityTypesInterface;
                             $email = ' email: ' . $email;
                         } else $email = '';
 
-                        $contact .= $name . ' (' . $phone . $email . ') <br>';
+                        $contact .= $contactName . ' (' . $phone . $email . ') <br>';
 
                     }
                     elseif($linkModel->getToEntityType() == 'companies'){
 
                         $companiMode = $apiClient->companies()->getOne($linkModel->getToEntityId());
-                        $name = $companiMode->getName();
+                        $companiName = $companiMode->getName();
 
                         $customField = $companiMode->getCustomFieldsValues();
                         if($customField !== null)$customField = $customField->getBy('fieldName', 'Пользовательское 2');
@@ -79,7 +79,7 @@ use AmoCRM\Helpers\EntityTypesInterface;
                             $customField = '';
                         }
 
-                        $compani .= $name  . $customField;
+                        $compani .= $companiName  . $customField;
 
                     }
                 }
